@@ -22,3 +22,12 @@ body {
 .box:hover {
 	background: #fafafa;
 }
+
+
+.reset-btn{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100px;
+	height: 40px;
+}

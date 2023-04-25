@@ -27,7 +27,6 @@ function pick(event) {
 	event.target.classList.add(turn)
 	board[row][column] = turn
 	round++
-
 	console.log(check())
 }
 
