@@ -20,14 +20,25 @@ const combinations = [
 const boxes = [...document.querySelectorAll('.box')]
 boxes.forEach(box => box.addEventListener('click', pick))
 
+let gameOver = false
+
 function pick(event) {
+	if (gameOver) {
+		return
+	}
+
 	const { row, column } = event.target.dataset
 	const turn = round % 2 === 0 ? PLAYER2 : PLAYER1
 	if (board[row][column] !== '') return
 	event.target.classList.add(turn)
 	board[row][column] = turn
 	round++
-	console.log(check())
+	const result = check()
+	if (result !== null) {
+		gameOver = true
+		console.log(result)
+		boxes.forEach(box => box.removeEventListener('click', pick))
+	}
 }
 
 function check() {
@@ -47,5 +58,27 @@ function check() {
 		}
 	})
 
-	return winner
+	if (winner !== null) {
+		return winner
+	}
+
+	if (result.every(field => field !== '')) {
+		return 'Draw'
+	}
+
+	return null 
+}
+
+function reset() {
+	round = 1
+	board.forEach((row, rowIndex) => {
+		row.forEach((col, colIndex) => {
+			board[rowIndex][colIndex] = ''
+			const box = document.querySelector(`[data-row='${rowIndex}'][data-column='${colIndex}']`)
+			box.classList.remove(PLAYER1)
+			box.classList.remove(PLAYER2)
+			box.addEventListener('click',pick)
+		})
+	})
+	gameOver = false
 }
